@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("BPCouncil", "DBM-Icecrown", 3)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20231203191448")
+mod:SetRevision("20241214193000")
 mod:SetCreatureID(37970, 37972, 37973)
 mod:SetUsedIcons(1, 5, 6, 7, 8)
 mod:SetBossHPInfoToHighest()
@@ -53,7 +53,7 @@ local warnKineticBomb			= mod:NewSpellAnnounce(72053, 3, nil, false)
 
 local specWarnKineticBomb		= mod:NewSpecialWarningCount(72053, "Ranged", nil, nil, 1)
 
-local timerKineticBombCD		= mod:NewCDCountTimer(18, 72053, nil, "Ranged", nil, 1, nil, nil, true) -- ~6s variance [18.0-23.9] Added "keep" arg. (10N Icecrown 2022/08/25 || 25H Lordaeron 2022/12/07 || 25H Lordaeron [2023-08-23]@[21:05:58]) - 19.2, 23.6, 22.2, 18.5, 19.2 || 18.5, 18.3, 22.1, 19.2, 20.8, 20.4, 19.7, 21.6, 20.9, 19.5, 20.5 || pull:19.8, 23.9, 21.9, 19.6, 21.4, 23.9, 18.5, 22.0, 18.5, 21.9, 21.6
+local timerKineticBombCD		= mod:NewCDCountTimer("v18-23.9", 72053, nil, "Ranged", nil, 1, nil, nil, true) -- ~6s variance [18.0-23.9] Added "keep" arg. (10N Icecrown 2022/08/25 || 25H Lordaeron 2022/12/07 || 25H Lordaeron [2023-08-23]@[21:05:58]) - 19.2, 23.6, 22.2, 18.5, 19.2 || 18.5, 18.3, 22.1, 19.2, 20.8, 20.4, 19.7, 21.6, 20.9, 19.5, 20.5 || pull:19.8, 23.9, 21.9, 19.6, 21.4, 23.9, 18.5, 22.0, 18.5, 21.9, 21.6
 
 local soundKineticBomb			= mod:NewSound(72053, nil, "Ranged")
 
@@ -68,7 +68,7 @@ local yellVortex				= mod:NewYellMe(72037)
 local specWarnVortexNear		= mod:NewSpecialWarningClose(72037, nil, nil, nil, 1, 2)
 local specWarnEmpoweredShockV	= mod:NewSpecialWarningMoveAway(72039, nil, nil, nil, 1, 2)
 
-local timerShockVortex			= mod:NewCDTimer(18.2, 72037, nil, nil, nil, 3, nil, nil, true) -- ~5s variance [18.2 - 22.7]. Added "keep" arg. (2 Warmane 2021 logs || 25H Lordaeron 2022/07/09 || 10N Icecrown 2022/08/25 || 25H Lordaeron 2022/09/07 || 25H Lordaeron 2022/10/21) - 19-22s || 20.3, 22.6, 21.3, 19.6, ..., 19.4, 19.7 || 18.5, 18.6 || pull:76.0 (Empowered 30.1), 18.4, 19.4, 22.0, 19.7, 22.7 || pull:76.3 (Empowered 16.3 + 30.0), 19.9, 18.2, 22.2
+local timerShockVortex			= mod:NewCDTimer("v18.2-22.7", 72037, nil, nil, nil, 3, nil, nil, true) -- ~5s variance [18.2 - 22.7]. Added "keep" arg. (2 Warmane 2021 logs || 25H Lordaeron 2022/07/09 || 10N Icecrown 2022/08/25 || 25H Lordaeron 2022/09/07 || 25H Lordaeron 2022/10/21) - 19-22s || 20.3, 22.6, 21.3, 19.6, ..., 19.4, 19.7 || 18.5, 18.6 || pull:76.0 (Empowered 30.1), 18.4, 19.4, 22.0, 19.7, 22.7 || pull:76.3 (Empowered 16.3 + 30.0), 19.9, 18.2, 22.2
 local timerEmpoweredShockVortex	= mod:NewCDTimer(30, 72039, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON, true) -- Added "keep" arg. (25H Lordaeron 2022/09/07) - pull:15.9, 30.0, 152.4 (20.1 non-empowered)
 
 local soundSpecWarnVortexNear	= mod:NewSoundClose(72037)
@@ -87,8 +87,8 @@ local warnGliteringSparks		= mod:NewTargetAnnounce(71807, 2, nil, false)
 local specWarnEmpoweredFlames	= mod:NewSpecialWarningRun(72040, nil, nil, nil, 4, 2)
 local yellEmpoweredFlames		= mod:NewYellMe(72040)
 
-local timerConjureFlamesCD		= mod:NewCDTimer(15.3, 71718, nil, nil, nil, 3, nil, nil, true) -- normal + empowered. REVIEW! ~13s variance [15.3-29.4]. Added "keep" arg (25H Lordaeron 2022/09/07 || 25H Lordaeron 2022/10/09 || 25H Lordaeron 2022/10/21) -- 20.0, 29.4, 24.3, 18.0, 23.5, 21.3, 27.6, 20.5, 22.3 || 20.0, 29.9, 22.0, 17.7, 24.6, 29.1, 29.9 || pull:76.3, 19.9, 18.2, 22.2 (Empowered: pull:93.8, 18.7, 15.3)
-local timerGlitteringSparksCD	= mod:NewCDTimer(15.9, 71807, nil, nil, nil, 2, nil, nil, true) -- This is pretty nasty on heroic. Very high variance! Added "keep" arg (10N Icecrown 2022/08/25 || 25H Lordaeron 2022/09/07) - 36, 17.5 || pull:12.5, 43.5, 20.8, 44.3, 38.6, 16.9, 33.3
+local timerConjureFlamesCD		= mod:NewCDTimer("v15.3-29.4", 71718, nil, nil, nil, 3, nil, nil, true) -- normal + empowered. REVIEW! ~13s variance [15.3-29.4]. Added "keep" arg (25H Lordaeron 2022/09/07 || 25H Lordaeron 2022/10/09 || 25H Lordaeron 2022/10/21) -- 20.0, 29.4, 24.3, 18.0, 23.5, 21.3, 27.6, 20.5, 22.3 || 20.0, 29.9, 22.0, 17.7, 24.6, 29.1, 29.9 || pull:76.3, 19.9, 18.2, 22.2 (Empowered: pull:93.8, 18.7, 15.3)
+local timerGlitteringSparksCD	= mod:NewCDTimer("v15.9-44.3", 71807, nil, nil, nil, 2, nil, nil, true) -- This is pretty nasty on heroic. Very high variance! Added "keep" arg (10N Icecrown 2022/08/25 || 25H Lordaeron 2022/09/07) - 36, 17.5 || pull:12.5, 43.5, 20.8, 44.3, 38.6, 16.9, 33.3
 
 local soundEmpoweredFlames		= mod:NewSoundYou(72040)
 
@@ -99,7 +99,7 @@ mod:AddArrowOption("EmpoweredFlameArrow", 72040, true)
 mod:AddTimerLine(L.Keleseth)
 local warnDarkNucleus			= mod:NewSpellAnnounce(71943, 1, nil, false)	-- instant cast
 
-local timerDarkNucleusCD		= mod:NewCDTimer(10, 71943, nil, false, nil, 5, nil, nil, true)	-- ~6s variance [10.5-16.3]. Added "keep" arg (25H Lordaeron 2022/09/07) - 12.1, 12.2, 14.2, 16.3, 12.2, 10.5, 13.8, 12.1, 14.1, 12.2, 12.1, 14.3, 14.1, 14.3, 13.9, 12.1
+local timerDarkNucleusCD		= mod:NewCDTimer("v10-16.3", 71943, nil, false, nil, 5, nil, nil, true)	-- ~6s variance [10.5-16.3]. Added "keep" arg (25H Lordaeron 2022/09/07) - 12.1, 12.2, 14.2, 16.3, 12.2, 10.5, 13.8, 12.1, 14.1, 12.2, 12.1, 14.3, 14.1, 14.3, 13.9, 12.1
 
 mod.vb.kineticIcon = 7
 mod.vb.kineticCount = 0

@@ -4,7 +4,7 @@ local L		= mod:GetLocalizedStrings()
 local CancelUnitBuff, GetSpellInfo = CancelUnitBuff, GetSpellInfo
 local UnitGUID = UnitGUID
 
-mod:SetRevision("20240716152353")
+mod:SetRevision("20241214193000")
 mod:SetCreatureID(36855)
 mod:SetUsedIcons(1, 2, 3, 7, 8)
 mod:SetMinSyncRevision(20220905000000)
@@ -57,7 +57,7 @@ local warnDominateMind				= mod:NewTargetNoFilterAnnounce(71289, 3)
 local specWarnDeathDecay			= mod:NewSpecialWarningGTFO(71001, nil, nil, nil, 1, 8)
 
 local timerDominateMind				= mod:NewBuffActiveTimer(12, 71289, nil, nil, nil, 5)
-local timerDominateMindCD			= mod:NewCDTimer(40, 71289, nil, nil, nil, 3, nil, nil, true) -- ~7s variance [40-46.7]. Added "keep" arg (10H Lordaeron 2022/09/02 || 25H Lordaeron 2022/09/04 || 25H Lordaeron [2023-07-05]@[19:41:47]) - 42.9, 43.5, Stage 2/17.3, 27.1/44.4, 43.6, 43.9, 43.7, 42.2 || 42.1, 40.1, Stage 2/31.9, 10.0/41.9 || 46.7, Stage 2/21.3, 20.6/42.0
+local timerDominateMindCD			= mod:NewCDTimer("v40-46.7", 71289, nil, nil, nil, 3, nil, nil, true) -- ~7s variance [40-46.7]. Added "keep" arg (10H Lordaeron 2022/09/02 || 25H Lordaeron 2022/09/04 || 25H Lordaeron [2023-07-05]@[19:41:47]) - 42.9, 43.5, Stage 2/17.3, 27.1/44.4, 43.6, 43.9, 43.7, 42.2 || 42.1, 40.1, Stage 2/31.9, 10.0/41.9 || 46.7, Stage 2/21.3, 20.6/42.0
 
 local soundSpecWarnDominateMind		= mod:NewSound(71289, nil, canShadowmeld or canVanish)
 
@@ -84,7 +84,7 @@ local timerSummonSpiritCD			= mod:NewCDTimer(11, 71426, nil, true, nil, 3, nil, 
 local timerFrostboltCast			= mod:NewCastTimer(2, 72007, nil, "HasInterrupt")
 local timerFrostboltVolleyCD		= mod:NewCDTimer(14, 72905, nil, nil, nil, 2)
 local timerTouchInsignificance		= mod:NewTargetTimer(30, 71204, nil, "Tank|Healer", nil, 5)
-local timerTouchInsignificanceCD	= mod:NewCDTimer(9, 71204, nil, "Tank|Healer", nil, 5, nil, nil, true) -- ~6s variance [9.0-14.7]. Added "keep" arg (25H Lordaeron [2022-09-04]@[19:35:18] || 25H Lordaeron [2022-09-14]@[19:18:07] || 25H Lordaeron [2022-11-16]@[21:20:38]) - "Touch of Insignificance-71204-npc:36855-224 = pull:143.2/Stage 2/8.2, 11.3, 9.6, 14.7, 9.8, 9.9, 10.9, 11.8, 10.7, 10.2, 9.8, 11.3, 11.9, 10.9, 12.7, 11.6, 12.1, 11.5, 11.5, 10.4, 10.7, 10.4" || pull:132.1/Stage 2/6.0, 12.7, 12.2, 9.9, 13.0, 10.9, 9.1, 10.8, 12.1, 10.0, 11.6, 11.2, 10.0, 10.3, 9.2, 11.0, 12.3, 9.3, 12.6, 11.8, 12.9" || pull:136.6/Stage 2/6.5, 12.5, 9.4, 11.0, 13.7, 10.4, 13.5, 11.2, 10.7, 9.5, 9.0, 12.1, 12.2
+local timerTouchInsignificanceCD	= mod:NewCDTimer("v9-14.7", 71204, nil, "Tank|Healer", nil, 5, nil, nil, true) -- ~6s variance [9.0-14.7]. Added "keep" arg (25H Lordaeron [2022-09-04]@[19:35:18] || 25H Lordaeron [2022-09-14]@[19:18:07] || 25H Lordaeron [2022-11-16]@[21:20:38]) - "Touch of Insignificance-71204-npc:36855-224 = pull:143.2/Stage 2/8.2, 11.3, 9.6, 14.7, 9.8, 9.9, 10.9, 11.8, 10.7, 10.2, 9.8, 11.3, 11.9, 10.9, 12.7, 11.6, 12.1, 11.5, 11.5, 10.4, 10.7, 10.4" || pull:132.1/Stage 2/6.0, 12.7, 12.2, 9.9, 13.0, 10.9, 9.1, 10.8, 12.1, 10.0, 11.6, 11.2, 10.0, 10.3, 9.2, 11.0, 12.3, 9.3, 12.6, 11.8, 12.9" || pull:136.6/Stage 2/6.5, 12.5, 9.4, 11.0, 13.7, 10.4, 13.5, 11.2, 10.7, 9.5, 9.0, 12.1, 12.2
 
 local soundWarnSpirit				= mod:NewSound(71426)
 
@@ -325,7 +325,7 @@ function mod:OnCombatStart(delay)
 	warnAddsSoon:Schedule(2.5-delay)			-- 3sec pre-warning on start
 	self:Schedule(5.5-delay, addsTimer, self)
 	if not self:IsDifficulty("normal10") then
-		timerDominateMindCD:Start(27-delay)	-- REVIEW! 2s variance? (10H Lordaeron 2022/09/02 || 25H Lordaeron 2022/09/04 || 25H Lordaeron [2023-07-05]@[19:41:47]) - 28.7 || 27.0 || 27.0
+		timerDominateMindCD:Start(string.format("v%s-%s", 27-delay, 28.7-delay))	-- REVIEW! 2s variance? (10H Lordaeron 2022/09/02 || 25H Lordaeron 2022/09/04 || 25H Lordaeron [2023-07-05]@[19:41:47]) - 28.7 || 27.0 || 27.0
 		specWarnWeapons:Show(checkWeaponRemovalSetting(self) and ENABLE or ADDON_DISABLED, (self.Options.EqUneqWeapons and self.Options.EqUneqTimer and (SLASH_STOPWATCH2):sub(2)) or (self.Options.EqUneqWeapons and COMBAT_LOG) or NONE, self.Options.EqUneqFilter)
 		if checkWeaponRemovalSetting(self) and self.Options.EqUneqTimer then
 			self:Schedule(26.5-delay, UnW, self)
@@ -445,7 +445,7 @@ function mod:SPELL_AURA_REMOVED(args)
 		warnPhase2:Show()
 		warnPhase2:Play("ptwo")
 		timerSummonSpiritCD:Start() -- (25H Lordaeron 2022/10/21) - Stage 2/11.0
-		timerTouchInsignificanceCD:Start(6) -- 3.4s variance [6.0-9.4] (25H Lordaeron [2022-09-23]@[20:40:18] || 25H Lordaeron [2022-10-05]@[20:21:27]) - Stage 2/6.0 || Stage 2/9.4
+		timerTouchInsignificanceCD:Start("v6-9.4") -- 3.4s variance [6.0-9.4] (25H Lordaeron [2022-09-23]@[20:40:18] || 25H Lordaeron [2022-10-05]@[20:21:27]) - Stage 2/6.0 || Stage 2/9.4
 		timerAdds:Cancel()
 		timerFrostboltVolleyCD:Start(20)
 		warnAddsSoon:Cancel()

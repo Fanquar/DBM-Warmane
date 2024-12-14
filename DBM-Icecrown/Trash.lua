@@ -3,7 +3,7 @@ local L		= mod:GetLocalizedStrings()
 
 local UnitGUID = UnitGUID
 
-mod:SetRevision("20240812000216")
+mod:SetRevision("20241214193000")
 mod:SetModelID(37007)
 mod:SetUsedIcons(1, 2, 3, 4, 5, 6, 7, 8)
 mod.isTrashMod = true
@@ -57,7 +57,7 @@ local timerDisruptingShout		= mod:NewCastTimer(3, 71022, nil, nil, nil, 2)
 local timerDarkReckoning		= mod:NewTargetTimer(8, 69483, nil, nil, nil, 5)
 local timerDeathPlague			= mod:NewTargetTimer(15, 72865, nil, nil, nil, 3)
 --Plagueworks
-local timerSeveredEssence		= mod:NewNextTimer(35.5, 71942, nil, nil, nil, 1--[[, nil, nil, true]]) -- REVIEW! 5s variance [35.5-40.5]. Removed "keep" arg, due to several edge cases where timer kept ticking to infinity. Until variance is implemented on DBT, this will never be accurate (25H Lordaeron [2023-08-19]@[11:49:20] || 25H Lordaeron [2023-08-27]@[10:41:16]) - 36.0 || 40.49; 35.51
+local timerSeveredEssence		= mod:NewNextTimer("v35.5-40.5", 71942, nil, nil, nil, 1--[[, nil, nil, true]]) -- REVIEW! 5s variance [35.5-40.5]. Removed "keep" arg, due to several edge cases where timer kept ticking to infinity. Until variance is implemented on DBT, this will never be accurate (25H Lordaeron [2023-08-19]@[11:49:20] || 25H Lordaeron [2023-08-27]@[10:41:16]) - 36.0 || 40.49; 35.51
 local timerZombies				= mod:NewNextTimer(20, 71159, nil, nil, nil, 1)
 local timerMortalWound			= mod:NewTargetTimer(15, 71127, nil, nil, nil, 5)
 local timerDecimate				= mod:NewNextTimer(33, 71123, nil, nil, nil, 2)
@@ -266,7 +266,7 @@ function mod:OnSync(msg, guid)
 		specWarnGosaEvent:Show()
 	elseif msg == "ValkyrAggro" and guid then
 		valkyrHeraldGUID[guid] = true
-		timerSeveredEssence:Start(8, guid) -- REVIEW! variance [8-10]? On Warmane, based on aggro, touchdown or swing?
+		timerSeveredEssence:Start("v8-10", guid) -- REVIEW! variance [8-10]? On Warmane, based on aggro, touchdown or swing?
 	elseif msg == "ValkyrDeaggro" and guid then
 		valkyrHeraldGUID[guid] = nil
 		timerSeveredEssence:Cancel(guid)

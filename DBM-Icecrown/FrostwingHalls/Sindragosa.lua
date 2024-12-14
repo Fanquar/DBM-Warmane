@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Sindragosa", "DBM-Icecrown", 4)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20241204093130")
+mod:SetRevision("20241214193000")
 mod:SetCreatureID(36853)
 mod:SetUsedIcons(1, 2, 3, 4, 5, 6)
 mod:SetHotfixNoticeRev(20241203000000)
@@ -47,7 +47,7 @@ local specWarnChilledtotheBone	= mod:NewSpecialWarningStack(70106, nil, mod:IsHe
 local specWarnBlisteringCold	= mod:NewSpecialWarningRun(70123, nil, nil, nil, 4, 2)
 
 local timerNextAirphase			= mod:NewTimer(110, "TimerNextAirphase", 43810, nil, nil, 6) -- Fixed timer on Air Yell: 110s
-local timerNextGroundphase		= mod:NewTimer(44.2, "TimerNextGroundphase", 43810, nil, nil, 6) -- 0.4s variance (10H Lordaeron 2022/10/02 || 25H Lordaeron 2022/10/02 || 25H Lordaeron 2022/10/06) - 44.2; 44.2 || 44.2; 44.3, 44.6; 44.2 || 45.1
+local timerNextGroundphase		= mod:NewTimer("v44.2-44.6", "TimerNextGroundphase", 43810, nil, nil, 6) -- 0.4s variance (10H Lordaeron 2022/10/02 || 25H Lordaeron 2022/10/02 || 25H Lordaeron 2022/10/06) - 44.2; 44.2 || 44.2; 44.3, 44.6; 44.2 || 45.1
 local timerNextFrostBreath		= mod:NewNextTimer(22, 69649, nil, "Tank|Healer", nil, 5, nil, DBM_COMMON_L.TANK_ICON)
 local timerNextBlisteringCold	= mod:NewCDTimer(66, 70123, nil, nil, nil, 2, nil, DBM_COMMON_L.DEADLY_ICON, true, 2) -- Added "keep" arg
 local timerNextBeacon			= mod:NewNextCountTimer(16, 70126, nil, nil, nil, 3, nil, DBM_COMMON_L.DEADLY_ICON)
@@ -56,7 +56,7 @@ local timerBlisteringCold		= mod:NewCastTimer(6, 70123, nil, nil, nil, 2)
 local timerUnchainedMagic		= mod:NewCDTimer(32, 69762, nil, nil, nil, 3) -- (25H Lordaeron 2022/07/09 || 10N Icecrown 2022/08/22 || 10N Icecrown 2022/08/25) - 32.0, 63.2, 32.1, 77.8, 32.1, 32.5, 31.9, 34.8 || 35.7, 58.4, 32.1, 77.9, 32.1, 78.6, 32.0, 32.0, 32.1 || 32.0, 62.1, 32.0, Stage 2/68.4, 9.9/78.3, 32.0
 local timerInstability			= mod:NewBuffFadesTimer(5, 69766, nil, nil, nil, 5)
 local timerChilledtotheBone		= mod:NewBuffFadesTimer(8, 70106, nil, nil, nil, 5)
-local timerTailSmash			= mod:NewCDTimer(27.1, 71077, nil, nil, nil, 2, nil, nil, true) -- ~7s variance [27-34]? Added "keep" arg. (25H Lordaeron 2022/07/09 || 10N Icecrown 2022/08/25 || 25H Lordaeron 2022/10/14) - 28.7; 93.3, 30.6, 83.1, 29.2, 29.6, 29.6, 33.8; 29.2, 65.7, 30.8, 79.1, 27.9, 31.1, 27.9, 27.4; 29.7; 28.9, 64.7, 27.4, 84.3, 32.4, 30.0, 29.2 || 94.0, 31.5, Stage 2/59.0, 19.1/78.0, 31.9 || Stage 1/20.0, 28.9, Stage 1.5/1.1, Stage 1/44.3, 21.5/65.7/66.8, 28.7, Stage 1.5/15.6, Stage 1/45.0, Stage 2/20.0, 2.1/22.1/67.1/82.8, 27.2, 31.6, 29.6, 31.4
+local timerTailSmash			= mod:NewCDTimer("v27.1-34", 71077, nil, nil, nil, 2, nil, nil, true) -- ~7s variance [27-34]? Added "keep" arg. (25H Lordaeron 2022/07/09 || 10N Icecrown 2022/08/25 || 25H Lordaeron 2022/10/14) - 28.7; 93.3, 30.6, 83.1, 29.2, 29.6, 29.6, 33.8; 29.2, 65.7, 30.8, 79.1, 27.9, 31.1, 27.9, 27.4; 29.7; 28.9, 64.7, 27.4, 84.3, 32.4, 30.0, 29.2 || 94.0, 31.5, Stage 2/59.0, 19.1/78.0, 31.9 || Stage 1/20.0, 28.9, Stage 1.5/1.1, Stage 1/44.3, 21.5/65.7/66.8, 28.7, Stage 1.5/15.6, Stage 1/45.0, Stage 2/20.0, 2.1/22.1/67.1/82.8, 27.2, 31.6, 29.6, 31.4
 
 local soundUnchainedMagic		= mod:NewSoundYou(69762, nil, "SpellCaster")
 
@@ -205,7 +205,7 @@ function mod:OnCombatStart(delay)
 	self:SetStage(1)
 	berserkTimer:Start(-delay)
 	timerNextAirphase:Start(50-delay)
-	timerNextBlisteringCold:Start(31.6-delay) -- ~10s variance [31.6-40] (10H Lordaeron 2022/10/02 || 25H Lordaeron 2022/10/02) - 37.5; 34.9 || 31.6; 36.4; 34.9; 34.9
+	timerNextBlisteringCold:Start(string.format("v%s-%s", 31.6-delay, 40-delay)) -- ~10s variance [31.6-40] (10H Lordaeron 2022/10/02 || 25H Lordaeron 2022/10/02) - 37.5; 34.9 || 31.6; 36.4; 34.9; 34.9
 	timerTailSmash:Start(20-delay) -- (25H Lordaeron 2022/07/09 || 10N Icecrown 2022/08/22 || 10N Icecrown 2022/08/25 || 10H Lordaeron 2022/10/02 || 25H Lordaeron 2022/10/02) - 20.0 || 20.0 || 20.0 || 20.0; 20.0 || 20.0; 19.9; 20.0; 20.0
 	timerUnchainedMagic:Start(10-delay) -- (25H Lordaeron 2022/07/09 || 10N Icecrown 2022/08/22 || 10N Icecrown 2022/08/25) - 10.1 || 10.1 || 10.0
 	self.vb.warned_P2 = false
@@ -443,8 +443,8 @@ function mod:OnSync(msg)
 		self:Unschedule(landingPhaseWorkaround)
 		self:SetStage(1)
 		timerUnchainedMagic:Start(10) -- (10H Lordaeron 2022/10/02 || 25H Lordaeron 2022/10/02) - 10.0; 10.0 || 10.0; 10.0, 10.0; 10.0
-		timerTailSmash:Start(19) -- ~5s variance [19-23.8]? (10N Icecrown 2022/08/25 || 10H Lordaeron 2022/10/02 || 25H Lordaeron 2022/10/02) - 19.0 || 21.4; 21.9 || 21.4; 23.8, 22.6; 22.2
-		timerNextBlisteringCold:Start(34) -- 6s variance [34-40]? (10H Lordaeron 2022/10/02 || 25H Lordaeron 2022/10/02) - 34.0; 34.0 || 34.0; 34.0; 34.0
+		timerTailSmash:Start("v19-23.8") -- ~5s variance [19-23.8]? (10N Icecrown 2022/08/25 || 10H Lordaeron 2022/10/02 || 25H Lordaeron 2022/10/02) - 19.0 || 21.4; 21.9 || 21.4; 23.8, 22.6; 22.2
+		timerNextBlisteringCold:Start("v34-40") -- 6s variance [34-40]? (10H Lordaeron 2022/10/02 || 25H Lordaeron 2022/10/02) - 34.0; 34.0 || 34.0; 34.0; 34.0
 		self:UnregisterShortTermEvents()
 	end
 end
