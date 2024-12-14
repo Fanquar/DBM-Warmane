@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("FlameLeviathan", "DBM-Ulduar")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20221031101217")
+mod:SetRevision("20241214191500")
 
 mod:SetCreatureID(33113)
 
@@ -26,7 +26,7 @@ local specWarnPursue			= mod:NewSpecialWarning("SpecialPursueWarnYou", nil, nil,
 
 local timerSystemOverload		= mod:NewBuffActiveTimer(20, 62475, nil, nil, nil, 6)
 local timerFlameVents			= mod:NewCastTimer(10, 62396, nil, nil, nil, 2, nil, DBM_COMMON_L.INTERRUPT_ICON)
-local timertFlameVentsCD		= mod:NewCDTimer(19.7, 62396, nil, nil, nil, 2) -- ~0.5s variance (S3 FM Log review 2022/07/17 || 25m Lordaeron 2022/10/30) - 0.1, 20.0, 20.0, 20.1, 20.0, 20.3 || 20.3, 19.7, 20.0, 20.1
+local timertFlameVentsCD		= mod:NewCDTimer("v19.7-20.3", 62396, nil, nil, nil, 2) -- ~0.5s variance (S3 FM Log review 2022/07/17 || 25m Lordaeron 2022/10/30) - 0.1, 20.0, 20.0, 20.1, 20.0, 20.3 || 20.3, 19.7, 20.0, 20.1
 local timerPursued				= mod:NewTargetTimer(30, 62374, nil, nil, nil, 3) -- Variance dependent on whether boss is pulled right after gate opens or not. Corrected using count. S3 FM Log review 2022/07/17 - 0.1, 11.0, 19.0, 30.0, 30.0, 30.0
 
 -- Hard Mode
@@ -92,10 +92,10 @@ function mod:SPELL_AURA_APPLIED(args)
 			DBM:Debug("Running Pursued timer in gate pull mode. boss1 had speed: "..bossMovingSpeed) -- 27.99370765686
 			if self.vb.pursueCount == 1 then
 				warnNextPursueSoon:Schedule(5.4)
-				timerPursued:Start(10.4, target) -- S2 Lord 2022/07/10 || S3 FM 2022/07/17 - 10.4 || 11.0
+				timerPursued:Start("v10.4-11.0", target) -- S2 Lord 2022/07/10 || S3 FM 2022/07/17 - 10.4 || 11.0
 			elseif self.vb.pursueCount == 2 then
 				warnNextPursueSoon:Schedule(14.0)
-				timerPursued:Start(19.0, target) -- S2 Lord 2022/07/10 || S3 FM 2022/07/17 - 19.6 || 19.0
+				timerPursued:Start("v19.0-19.6", target) -- S2 Lord 2022/07/10 || S3 FM 2022/07/17 - 19.6 || 19.0
 			else
 				warnNextPursueSoon:Schedule(25)
 				timerPursued:Start(target)

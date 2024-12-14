@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Razorscale", "DBM-Ulduar")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20220710223858")
+mod:SetRevision("20241214191500")
 mod:SetCreatureID(33186)
 
 mod:RegisterCombat("combat_yell", L.YellAir)
@@ -43,10 +43,10 @@ local warnFuseArmor					= mod:NewStackAnnounce(64771, 2, nil, "Tank")
 local specWarnFuseArmor				= mod:NewSpecialWarningStack(64771, nil, 2, nil, nil, 1, 6)
 local specWarnFuseArmorOther		= mod:NewSpecialWarningTaunt(64771, nil, nil, nil, 1, 2)
 
-local timerDeepBreathCooldown		= mod:NewCDTimer(20.1, 64021, nil, nil, nil, 5) -- ~3s variance (25 man log review 2022/07/10) - 23.0, 20.1
+local timerDeepBreathCooldown		= mod:NewCDTimer("v20.1-23", 64021, nil, nil, nil, 5) -- ~3s variance (25 man log review 2022/07/10) - 23.0, 20.1
 local timerDeepBreathCast			= mod:NewCastTimer(2.5, 64021)
 local timerGrounded					= mod:NewTimer(45, "timerGrounded", nil, nil, nil, 6)
-local timerFuseArmorCD				= mod:NewCDTimer(10.1, 64771, nil, "Tank", nil, 5, nil, DBM_COMMON_L.TANK_ICON) -- 10s variance (25 man log review 2022/07/10) - 10.1, 20.1
+local timerFuseArmorCD				= mod:NewCDTimer("v10.1-20.1", 64771, nil, "Tank", nil, 5, nil, DBM_COMMON_L.TANK_ICON) -- 10s variance (25 man log review 2022/07/10) - 10.1, 20.1
 
 mod:GroupSpells(63236, 64733) -- Devouring Flame (cast and damage)
 

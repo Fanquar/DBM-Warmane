@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Kologarn", "DBM-Ulduar")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20221031105808")
+mod:SetRevision("20241214191500")
 mod:SetCreatureID(32930)
 mod:SetUsedIcons(5, 6, 7, 8)
 
@@ -41,8 +41,8 @@ local specWarnEyebeamNear		= mod:NewSpecialWarningClose(63346, nil, nil, nil, 1,
 local yellBeam					= mod:NewYell(63346)
 
 local timerCrunch10				= mod:NewTargetTimer(6, 63355)
-local timerNextSmash			= mod:NewCDTimer(14.4, 64003, nil, "Tank", nil, 5, nil, DBM_COMMON_L.TANK_ICON) -- 3s variance (2022/07/05 log review) - 16.7, 14.4, 14.4, 16.8, 14.4, 14.4 || 13.7, 16.8, 14.4, 14.4, 14.4 || 16.0, 14.3, 16.8, 14.4 || 16.8, 14.4, 14.4, 14.4, 16.8 || 14.1, 14.4, 16.8, 14.4
-local timerNextEyebeam			= mod:NewCDTimer(15.9, 63346, nil, nil, nil, 3, nil, DBM_COMMON_L.IMPORTANT_ICON, true) -- almost 20s variance! Added "keep" arg (2022/07/05 log review || ... ||| 25m Lordaeron 2022/10/09 || 25m Lordaeron 2022/10/30) - 28, 31, 27 || 21, 19, 17, 33 || 25 || 33, 23 || 30, 16 ||| 23.0, 15.9, 23.3, 25.2 || 21.2, 22.9, 17.5, 30.1, 22.9
+local timerNextSmash			= mod:NewCDTimer("v14.4-16.8", 64003, nil, "Tank", nil, 5, nil, DBM_COMMON_L.TANK_ICON) -- 3s variance (2022/07/05 log review) - 16.7, 14.4, 14.4, 16.8, 14.4, 14.4 || 13.7, 16.8, 14.4, 14.4, 14.4 || 16.0, 14.3, 16.8, 14.4 || 16.8, 14.4, 14.4, 14.4, 16.8 || 14.1, 14.4, 16.8, 14.4
+local timerNextEyebeam			= mod:NewCDTimer("v15.9-33", 63346, nil, nil, nil, 3, nil, DBM_COMMON_L.IMPORTANT_ICON, true) -- almost 20s variance! Added "keep" arg (2022/07/05 log review || ... ||| 25m Lordaeron 2022/10/09 || 25m Lordaeron 2022/10/30) - 28, 31, 27 || 21, 19, 17, 33 || 25 || 33, 23 || 30, 16 ||| 23.0, 15.9, 23.3, 25.2 || 21.2, 22.9, 17.5, 30.1, 22.9
 
 mod:AddSetIconOption("SetIconOnEyebeamTarget", 63346, true, false, {8})
 
@@ -80,8 +80,8 @@ end
 function mod:OnCombatStart(delay)
 	enrageTimer:Start(-delay)
 	timerNextSmash:Start(5-delay) -- 2s variance (2022/07/05 log review) - [5-7]
-	timerNextEyebeam:Start(20.2-delay) -- (2022/07/05 log review || 25m Lordaeron 2022/10/30) - 21 || 20.2
-	timerNextShockwave:Start(18.2-delay) -- (2022/07/05 log review || 25m Lordaeron 2022/10/30) - 19 || 18.2
+	timerNextEyebeam:Start(string.format("v%s-%s", 20.2-delay, 21-delay)) -- (2022/07/05 log review || 25m Lordaeron 2022/10/30) - 21 || 20.2
+	timerNextShockwave:Start(string.format("v%s-%s", 18.2-delay, 19-delay)) -- (2022/07/05 log review || 25m Lordaeron 2022/10/30) - 19 || 18.2
 	timerNextGrip:Start(24.2-delay) --  (25m Lordaeron 2022/10/30) - 24.2
 end
 
