@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("LordMarrowgar", "DBM-Icecrown", 1)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision("20230605220610")
+mod:SetRevision("20241214193000")
 mod:SetCreatureID(36612)
 mod:SetUsedIcons(1, 2, 3, 4, 5, 6, 7, 8)
 mod:SetHotfixNoticeRev(20221117000000)
@@ -25,7 +25,7 @@ local warnImpale			= mod:NewTargetNoFilterAnnounce(72669, 3)
 local specWarnColdflame		= mod:NewSpecialWarningGTFO(69146, nil, nil, nil, 1, 8)
 local specWarnWhirlwind		= mod:NewSpecialWarningRun(69076, nil, nil, nil, 4, 2)
 
-local timerBoneSpike		= mod:NewCDTimer(15, 69057, nil, nil, nil, 1, nil, DBM_COMMON_L.DAMAGE_ICON, true) -- Has two sets of spellIDs, one before bone storm and one during bone storm (both sets are separated below). Will use UNIT_SPELLCAST_START for calculations since it uses spellName and thus already groups them in the log. 5s variance [15-20]. Added "keep" arg (10N Icecrown 2022/08/25 || 25H Lordaeron 2022/09/14 || 25H Lordaeron 2022/11/17) - pull:15.0, 19.0, 15.2, 49.5 || pull:15.0, 17.3, 16.5, 18.7, 16.0, 19.6, 18.9, 18.7, 16.4, 19.3, 16.0 || pull:15.0, 19.7, 19.2, 19.6, 15.6, 18.9, 18.5, 16.4, 17.9, 18.4
+local timerBoneSpike		= mod:NewCDTimer("v15-19.7", 69057, nil, nil, nil, 1, nil, DBM_COMMON_L.DAMAGE_ICON, true) -- Has two sets of spellIDs, one before bone storm and one during bone storm (both sets are separated below). Will use UNIT_SPELLCAST_START for calculations since it uses spellName and thus already groups them in the log. 5s variance [15-20]. Added "keep" arg (10N Icecrown 2022/08/25 || 25H Lordaeron 2022/09/14 || 25H Lordaeron 2022/11/17) - pull:15.0, 19.0, 15.2, 49.5 || pull:15.0, 17.3, 16.5, 18.7, 16.0, 19.6, 18.9, 18.7, 16.4, 19.3, 16.0 || pull:15.0, 19.7, 19.2, 19.6, 15.6, 18.9, 18.5, 16.4, 17.9, 18.4
 local timerWhirlwindCD		= mod:NewCDTimer(90, 69076, nil, nil, nil, 2, nil, DBM_COMMON_L.MYTHIC_ICON) -- As of 16/11/2022, Warmane fixed this timer. (25H Lordaeron 2022/11/16 || 25H Lordaeron 2022/11/17 || 25N Lordaeron 2023-02-10 || 25N Lordaeron [2023-02-14]@[20:08:16]) - Bone Storm-69076-npc:36612 = pull:45.0, 90.1 || pull:45.0, 90.0 || pull:45.0, 90.0 || pull:45.0, 90.1
 local timerWhirlwind		= mod:NewBuffActiveTimer(20, 69076, nil, nil, nil, 6)
 local timerBoned			= mod:NewAchievementTimer(8, 4610)
