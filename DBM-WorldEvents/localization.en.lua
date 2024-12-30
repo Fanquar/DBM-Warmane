@@ -108,3 +108,29 @@ L:SetMiscLocalization({
 	HorsemanSoldiers	= "Soldiers arise, stand and fight! Bring victory at last to this fallen knight!", -- 23861
 	SayCombatEnd		= "This end have I reached before.  What new adventure lies in store?" -- 23455
 })
+
+-----------------------------
+--  Warmane Annual Events  --
+----------------------------
+--  Tower Defense (2024)  --
+----------------------------
+L = DBM:GetModLocalization("WarmaneTowerDefense")
+
+L:SetGeneralLocalization({
+	name = "Tower Defense (2024)"
+})
+
+-- L:SetWarningLocalization({
+-- })
+
+-- L:SetTimerLocalization({
+-- })
+
+-- L:SetOptionLocalization({
+-- })
+
+L:SetMiscLocalization({
+	RoundStart			= "Round (%d+) starts now!",
+	RoundComplete		= "Round (%d+) complete! Buy your upgrades at the vendor now.",
+	RoundFailed			= "Your defense has failed" -- , you have survived (%d) round!
+})
